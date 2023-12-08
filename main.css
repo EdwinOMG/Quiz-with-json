@@ -1,0 +1,79 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* Change this to your desired background color */
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff; /* Change this to your desired container background color */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Quiz elements */
+#quiz-container {
+    text-align: center;
+}
+
+#question {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#answer-options {
+    list-style-type: none;
+    padding: 0;
+}
+
+#answer-options li {
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#answer-options li:hover {
+    background-color: #eaeaea; /* Change this to the hover color */
+}
+
+#submit-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+#submit-btn:hover {
+    background-color: #45a049; /* Change this to the hover color */
+}
+
+/* Styling for selected options */
+.choice-bubble {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    margin-right: 8px;
+}
+
+.selected {
+    background-color: green; /* Change this to the selected color */
+}

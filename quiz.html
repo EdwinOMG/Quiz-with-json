@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Quiz</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1>Interactive Quiz</h1>
+    <div id="quiz-container">
+        <p id="questionText"></p>
+        <ul id="answer-options" class="list-unstyled"></ul>
+        <p id="questions-left"></p>
+        <button id="submit-btn" class="btn btn-primary">Next</button>
+        <p id="score"></p>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let quizData = [];
+
+        const questionElement = document.getElementById('questionText');
+        const optionsListElement = document.getElementById('answer-options');
+        const submitButton = document.getElementById('submit-btn');
+        const questionsLeftElement = document.getElementById('questions-left');
+        const scoreElement = document.getElementById('score');
+
+        function loadJSON(callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.overrideMimeType("application/json");
+            xhr.open('GET', 'quizData.json', true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    callback(xhr.responseText);
+                }
+            };
+            xhr.send(null);
+        }
+
+        function displayQuestion() {
+            const currentQuestion = quizData[currentQuestionIndex];
+            questionElement.textContent = currentQuestion.questionText;
+            optionsListElement.innerHTML = '';
+
+            currentQuestion.options.forEach((option, index) => {
+                const li = document.createElement('li');
+                li.textContent = option;
+
+                const choiceBubble = document.createElement('span');
+                choiceBubble.classList.add('choice-bubble');
+                li.appendChild(choiceBubble);
+
+                li.addEventListener('click', selectOption);
+                optionsListElement.appendChild(li);
+            });
+
+            questionsLeftElement.textContent = `Questions left: ${quizData.length - currentQuestionIndex}`;
+            submitButton.textContent = (currentQuestionIndex === quizData.length - 1) ? 'Submit' : 'Next';
+        }
+
+        function selectOption(event) {
+            const selectedOption = event.target;
+            const selectedIndex = Array.from(selectedOption.parentNode.children).indexOf(selectedOption);
+            const currentQuestion = quizData[currentQuestionIndex];
+
+            if (currentQuestion.options[selectedIndex] === currentQuestion.answer) {
+                score++;
+            }
+
+            Array.from(optionsListElement.children).forEach(li => li.classList.remove('selected'));
+            selectedOption.classList.add('selected');
+        }
+
+        function submitQuiz() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                scoreElement.textContent = `Your Score: ${score} out of ${quizData.length}`;
+                optionsListElement.innerHTML = '';
+                submitButton.style.display = 'none';
+                questionsLeftElement.textContent = '';
+            }
+        }
+
+        loadJSON(function (data) {
+            quizData = JSON.parse(data).questions;
+            displayQuestion();
+        });
+
+        submitButton.addEventListener('click', submitQuiz);
+    });
+</script>
+
+</body>
+</html>
